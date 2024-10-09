@@ -12,7 +12,7 @@ export const useTaskStore = create((set) => ({
     getTasks: async (projectId) => {
         set({ isLoading: true });
         try {
-            const response = await axios.get(`http://localhost:5000/api/projects/${projectId}/tasks`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects/${projectId}/tasks`);
             console.log("API response: ", response.data)
             set({ tasks: response.data, isLoading: false });
             // console.log(tasks)
@@ -38,7 +38,7 @@ export const useTaskStore = create((set) => ({
     addTask: async (projectId, taskData) => {
         set({ isLoading: true });
         try {
-            const response = await axios.post(`http://localhost:5000/api/projects/${projectId}/tasks`, taskData);
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects/${projectId}/tasks`, taskData);
             set((state) => ({
                 tasks: [...state.tasks, response.data],
                 isLoading: false,

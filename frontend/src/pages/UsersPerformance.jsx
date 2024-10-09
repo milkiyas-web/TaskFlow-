@@ -29,7 +29,7 @@ export default function UsersPerformance() {
 
             try {
                 // Fetch performance data from your backend
-                const performanceResponse = await axios.get('http://localhost:5000/api/admin/users-performance');
+                const performanceResponse = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/admin/users-performance`);
                 const performanceData = performanceResponse.data;
 
                 // Fetch organization members

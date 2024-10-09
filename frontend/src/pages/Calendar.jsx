@@ -49,7 +49,7 @@ const CalendarComponent = () => {
     const fetchEvents = async () => {
         if (user) {
             try {
-                const response = await axios.get(`http://localhost:5000/api/events/${user.id}`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/events/${user.id}`);
                 const formattedEvents = response.data.map(event => ({
                     ...event,
                     start: new Date(event.start),
@@ -71,7 +71,7 @@ const CalendarComponent = () => {
     const updateStreak = async () => {
         if (user) {
             try {
-                await axios.post(`http://localhost:5000/api/streaks/${user.id}/update`);
+                await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/streaks/${user.id}/update`);
             } catch (error) {
                 console.error('Error updating streak:', error);
             }
@@ -88,7 +88,7 @@ const CalendarComponent = () => {
                 userId: user.id
             }
             try {
-                const response = await axios.post('http://localhost:5000/api/events', newEvent);
+                const response = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/events`, newEvent);
                 if (response.status === 201) {
                     const createdEvent = {
                         ...response.data,
@@ -145,7 +145,7 @@ const CalendarComponent = () => {
             };
             try {
                 // Use selectedEvent._id instead of selectedEvent.id
-                const response = await axios.put(`http://localhost:5000/api/events/${selectedEvent._id}`, updatedEvent);
+                const response = await axios.put(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/events/${selectedEvent._id}`, updatedEvent);
                 if (response.status === 200) {
                     const updatedEventData = {
                         ...response.data,
@@ -166,7 +166,7 @@ const CalendarComponent = () => {
     const handleDeleteEvent = async () => {
         if (selectedEvent) {
             try {
-                await axios.delete(`http://localhost:5000/api/events/${selectedEvent._id}`);
+                await axios.delete(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/events/${selectedEvent._id}`);
                 setEvents(events.filter(e => e.id !== selectedEvent._id));
                 setSelectedEvent(null);
                 setEventName('');

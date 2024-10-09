@@ -71,7 +71,7 @@ const Board = ({ projectId }) => {
         console.log("Updated tasks:", updatedTasks);
         setTasks(updatedTasks);
         try {
-            await axios.patch(`http://localhost:5000/api/projects/${projectId}/tasks/${taskId}`, { status: newStatus });
+            await axios.patch(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects/${projectId}/tasks/${taskId}`, { status: newStatus });
             console.log("Task status updated successfully");
         } catch (error) {
             console.error("Error updating task status: ", error.message)

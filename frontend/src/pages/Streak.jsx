@@ -19,7 +19,7 @@ export default function WritingStats() {
         const fetchStreakData = async () => {
             if (user) {
                 try {
-                    const response = await axios.get(`http://localhost:5000/api/streaks/${user.id}`);
+                    const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/streaks/${user.id}`);
                     setStreakData(response.data);
                 } catch (error) {
                     console.error('Error fetching streak data:', error);

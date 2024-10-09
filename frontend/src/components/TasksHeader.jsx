@@ -9,7 +9,7 @@ const TasksHeader = ({ projectId }) => {
     useEffect(() => {
         const fetchProjectData = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/projects/${projectId}`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects/${projectId}`);
                 const projectData = response.data;
                 console.log(projectData)
                 setProjectTitle(projectData.name);

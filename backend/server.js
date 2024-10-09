@@ -26,7 +26,11 @@ app.use(
     })
 );
 
-// app.use("/api/tasks", taskRoute)
+
+app.get("/", (req, res) => {
+
+    res.send("Hello World")
+})
 
 app.get("/api/projects", async (req, res) => {
     try {

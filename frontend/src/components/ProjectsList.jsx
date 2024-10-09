@@ -101,7 +101,7 @@ const ProjectsList = () => {
                 console.log("no organization")
             };
             try {
-                const res = await axios.get(`http://localhost:5000/api/projects?organizationId=${organization.id}`);
+                const res = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects?organizationId=${organization.id}`);
                 setProjects(res.data);
                 console.log(res.data)
             } catch (error) {
@@ -154,12 +154,12 @@ const ProjectsList = () => {
 
         try {
             console.log("clicked", updatedProjectData);
-            const res = await axios.post("http://localhost:5000/api/projects", updatedProjectData);
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects`, updatedProjectData);
             setProjectData({ name: "", user: "", deadline: "", tag: "", description: "" });
             setValue([]);
             setIsModalOpen(false);
             // Refresh the projects list
-            const updatedProjects = await axios.get(`http://localhost:5000/api/projects?organizationId=${organization.id}`);
+            const updatedProjects = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects?organizationId=${organization.id}`);
             setProjects(updatedProjects.data);
         } catch (error) {
             console.log("error creating project", error);

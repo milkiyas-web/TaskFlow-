@@ -25,7 +25,7 @@ export default function AdminDashboard() {
                 try {
                     const [memberList, userDataResponse] = await Promise.all([
                         organization.getMemberships(),
-                        axios.get('http://localhost:5000/api/userdata') // Adjust the URL as needed
+                        axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/userdata`) // Adjust the URL as needed
                     ]);
 
                     setMembers(memberList.data || []);
@@ -43,7 +43,7 @@ export default function AdminDashboard() {
     const handleViewPerformance = async (user) => {
         setSelectedUser(user);
         try {
-            const response = await axios.get(`http://localhost:5000/api/userdata/${user.publicUserData?.userId}`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/userdata/${user.publicUserData?.userId}`);
             setUserPerformance(response.data);
         } catch (error) {
             console.error('Error fetching user performance:', error);

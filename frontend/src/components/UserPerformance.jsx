@@ -15,7 +15,7 @@ export default function UserPerformance() {
     useEffect(() => {
         const fetchUserPerformance = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/userdata/${userId}`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/userdata/${userId}`);
                 setUserPerformance(response.data);
                 setLoading(false);
             } catch (error) {
