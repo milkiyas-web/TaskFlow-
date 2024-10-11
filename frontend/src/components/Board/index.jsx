@@ -3,7 +3,7 @@ import { Check, ChevronsUpDown, EllipsisVertical, MessageSquareMore, Plus } from
 import React, { useEffect, useState } from 'react'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { format, isValid } from "date-fns"
+import { format, isValid, set } from "date-fns"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../../components/ui/dialog'
 import { Label } from '../../components/ui/label'
 import { Input } from '../../components/ui/input'
@@ -241,6 +241,7 @@ const TaskColumn = ({
     };
 
     const { addTask, isLoading } = useTaskStore();
+    const [Loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -249,20 +250,24 @@ const TaskColumn = ({
             return;
         }
 
-        // Assuming you have access to the current user's ID
-        // const currentUserId = getCurrentUserId(); // Replace with your actual method of getting the current user's ID
-
         const currentUserId = user?.id;
 
         const taskData = {
             ...newTaskData,
-            author: currentUserId, // Add this line to include the author
+            author: currentUserId,
         };
-
+        setLoading(true);
         try {
             await addTask(projectId, taskData);
+            // const updatedTasks = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects/${projectId}/tasks`);
+            // Add a delay before fetching the updated tasks list
+            setTimeout(async () => {
+                await getTasks(projectId);
+                setLoading(false); // End loading
+            }, 3000);
         } catch (error) {
             console.error("Error adding task: ", error.message);
+            setLoading(false)
         }
 
         // Reset form fields...
@@ -277,6 +282,7 @@ const TaskColumn = ({
             assignees: [],
         });
         setValue([]);
+        setIsModalOpen(false);
     };
 
 
@@ -410,7 +416,7 @@ const TaskColumn = ({
                                         <div className="flex gap-2 justify-start">
                                             {value?.length ?
                                                 value.map((val, i) => (
-                                                    <div key={i} className="px-2 py-1 rounded-xl border bg-slate-200 text-xs font-medium">
+                                                    <div key={i} className="px-2 py-1 rounded-xl border bg-slate-200 text-black text-xs font-medium">
                                                         {formattedMembers.find((user) => user.value === val)?.label}
                                                     </div>
                                                 ))
@@ -451,8 +457,8 @@ const TaskColumn = ({
 
 
                         <DialogFooter>
-                            <Button type="submit" className="bg-blue-500 text-white" >
-                                {/* Loading */}Add Task
+                            <Button type="submit" className="bg-blue-500 text-white hover:bg-blue-700" >
+                                {Loading ? "Creating Task" : "Create Task"}
                             </Button>
                         </DialogFooter>
                     </form>

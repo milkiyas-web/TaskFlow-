@@ -95,6 +95,8 @@ const CalendarComponent = () => {
                         start: new Date(response.data.start),
                         end: new Date(response.data.end)
                     };
+                    const updatedEvent = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects?organizationId=${organization.id}`);
+                    setEvents(updatedEvent.data);
                     addEvent(createdEvent);
                     setSelectedSlot(null);
                     setEventName('');
