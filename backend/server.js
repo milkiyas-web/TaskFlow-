@@ -21,14 +21,12 @@ app.use(cookieParser());
 // Allow requests from the frontend origin
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: ["http://localhost:5173", "https://task-flow-fcwt.vercel.app"],
         credentials: true,
     })
 );
 
-
 app.get("/", (req, res) => {
-
     res.send("Hello World")
 })
 
@@ -310,5 +308,3 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     connectDB();
 })
-
-// Add this new endpoint to fetch all user data
