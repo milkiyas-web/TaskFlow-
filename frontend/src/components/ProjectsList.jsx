@@ -4,6 +4,7 @@ import { useForm, Controller } from "react-hook-form"
 import { Check, ChevronsUpDown, EllipsisVertical } from "lucide-react"
 import { useOrganization } from '@clerk/clerk-react'
 
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from 'react-router-dom'
@@ -31,55 +32,96 @@ import {
 import axios from '../lib/axios.js'
 import { Form, FormItem, FormLabel, FormMessage } from './ui/form'
 import { frame } from 'framer-motion'
-import { useAuth } from '@clerk/clerk-react'
+import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
 
 const ProjectsList = () => {
-    const { organization, isLoaded } = useOrganization();
+    //  const { organization, isLoaded } = useOrganization();
+    // const { isAuthenticated, user } = useKindeAuth(); // Use Kinde Auth
+    // const [members, setMembers] = useState([]);
+    // const [error, setError] = useState(null);
+
+    // useEffect(() => {
+    //     const fetchOrganizationMembers = async () => {
+    //         if (organization) {
+    //             try {
+    //                 console.log('Fetching members for organization:', organization.id);
+    //                 const memberList = await organization.getMemberships();
+    //                 setMembers(memberList.data || []);
+    //             } catch (error) {
+    //                 console.error('Error fetching organization members:', error);
+    //                 setError(error.message);
+    //                 setMembers([]);
+    //             }
+    //         }
+    //     };
+
+    //     fetchOrganizationMembers();
+    // }, [organization]);
+
+    // if (!isLoaded) {
+    //     return <div className='flex items-center justify-center h-screen w-full'>
+    //         <div className='loader'></div>
+    //     </div>;
+    // }
+
+    // if (!organization) {
+    //     return <div>No organization selected</div>;
+    // }
+
+    // if (error) {
+    //     return <div>Error: {error}</div>;
+    // }
+
+
+
+    // const formattedMembers = members.map(member => {
+
+    //     return {
+    //         value: member.publicUserData?.userId || '',
+    //         label: `${member.publicUserData?.firstName || ''} ${member.publicUserData?.lastName || ''}`.trim() || 'Unknown User'
+    //     };
+    // });
+    const { isAuthenticated, user, getOrganizationMembers } = useKindeAuth(); // Use Kinde Auth
     const [members, setMembers] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchOrganizationMembers = async () => {
-            if (organization) {
-                try {
-                    console.log('Fetching members for organization:', organization.id);
-                    const memberList = await organization.getMemberships();
-                    setMembers(memberList.data || []);
-                } catch (error) {
-                    console.error('Error fetching organization members:', error);
-                    setError(error.message);
-                    setMembers([]);
+            try {
+                if (user) {
+                    console.log('Fetching members for user organization');
+                    // Assuming getOrganizationMembers fetches the members for the current user's organization
+                    const memberList = await getOrganizationMembers();
+                    setMembers(memberList.data || []);  // Adapt this based on the response structure from Kinde
                 }
+            } catch (error) {
+                console.error('Error fetching organization members:', error);
+                setError(error.message);
+                setMembers([]);
             }
         };
 
-        fetchOrganizationMembers();
-    }, [organization]);
+        if (isAuthenticated && user) {
+            fetchOrganizationMembers();
+        }
+    }, [isAuthenticated, user]);
 
-    if (!isLoaded) {
+    if (!isAuthenticated) {
         return <div className='flex items-center justify-center h-screen w-full'>
             <div className='loader'></div>
         </div>;
-    }
-
-    if (!organization) {
-        return <div>No organization selected</div>;
     }
 
     if (error) {
         return <div>Error: {error}</div>;
     }
 
-
-
     const formattedMembers = members.map(member => {
-
         return {
-            value: member.publicUserData?.userId || '',
-            label: `${member.publicUserData?.firstName || ''} ${member.publicUserData?.lastName || ''}`.trim() || 'Unknown User'
+            value: member.userId || '',
+            label: `${member.firstName || ''} ${member.lastName || ''}`.trim() || 'Unknown User'
         };
     });
-
 
 
     const navigate = useNavigate()
@@ -93,7 +135,6 @@ const ProjectsList = () => {
         deadline: "",
         tag: "",
     });
-    const { user } = useAuth();
 
     useEffect(() => {
         const fetchProjects = async () => {

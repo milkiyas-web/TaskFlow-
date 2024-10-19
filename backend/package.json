@@ -22,6 +22,7 @@
     "mongoose": "^8.6.1",
     "nodemon": "^3.1.4",
     "react-hot-toast": "^2.4.1",
+    "svix": "^1.37.0",
     "zustand": "^4.5.5"
   }
 }

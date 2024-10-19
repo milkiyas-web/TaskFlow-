@@ -14,7 +14,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Moon, Sun } from "lucide-react"
+import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
 const Hero = () => {
+    const { login, register } = useKindeAuth()
     return (
         <div className="min-h-screen bg-black dark:text-white font-sans">
             {/* Hero Section */}
@@ -29,16 +31,12 @@ const Hero = () => {
                 <nav className="relative z-10 px-6 py-4 flex justify-between items-center">
                     <div className="text-2xl font-bold">TaskFlow</div>
                     <div className="space-x-4">
-                        <Link to="/sign-in">
-                            <Button variant="ghost" className="text-white rounded-3xl">Log in</Button>
-                        </Link>
-                        <Link to="/sign-up">
-                            <Button variant="outline" className="text-white rounded-3xl border-gray-700 bg-gray-700 hover:bg-white hover:text-black">Sign up</Button>
-                        </Link>
+                        <Button variant="ghost" onClick={login} className="text-white rounded-3xl">Log in</Button>
+                        <Button variant="outline" onClick={register} className="text-white rounded-3xl border-gray-700 bg-gray-700 hover:bg-white hover:text-black">Sign up</Button>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="icon">
-                                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 bg-black dark:scale-0" />
                                     <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                                     <span className="sr-only">Toggle theme</span>
                                 </Button>

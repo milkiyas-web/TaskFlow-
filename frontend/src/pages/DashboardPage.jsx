@@ -14,19 +14,20 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "@/components/ThemeProvider"
-import { UserButton } from '@clerk/clerk-react'
-import { useOrganization } from '@clerk/clerk-react';
+import { useKindeAuth } from '@kinde-oss/kinde-auth-react'
+
 
 const DashboardPage = () => {
     const { setTheme } = useTheme()
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const { organization, isLoaded } = useOrganization();
+    // const { organization, isLoaded } = useOrganization();
+    const { user, isAuthenticated, isLoading } = useKindeAuth();
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     };
 
-    if (!isLoaded) {
+    if (isLoading) {
         return <div className='flex items-center justify-center h-screen w-full'>
             <div className='loader'></div>
         </div>;
@@ -61,7 +62,16 @@ const DashboardPage = () => {
                             <Badge className="bg-muted text-muted-foreground">12 Projects</Badge>
                         </div>
                     </div>
-                    <UserButton afterSignOutUrl="/" />
+                    {/* <UserButton afterSignOutUrl="/" /> */}
+                    {
+                        isAuthenticated ? (
+                            <div>
+                                <h2>{user.first_name || ""}</h2>
+                            </div>
+                        ) : (
+                            <p>You are not logged in</p>
+                        )
+                    }
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
