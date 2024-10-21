@@ -3,11 +3,12 @@ import logo from '../assets/logo.png'
 import { Button } from './ui/button'
 import { Link, Outlet } from 'react-router-dom'
 import { Clipboard, ListTodo, ShieldAlertIcon } from 'lucide-react'
-import { UserButton } from '@clerk/clerk-react'
+import { UserButton, useUser } from '@clerk/clerk-react'
 const Sidebar = () => {
     const [projectsOpen, setProjectsOpen] = useState(false);
     const toggleProjects = () => setProjectsOpen(!projectsOpen);
-
+    const { user } = useUser();
+    console.log(user)
     return (
 
         <div className=' border-r dark:bg-black bg-muted/40 lg:block'>
