@@ -337,41 +337,7 @@ app.post('/api/streaks/:userId/update', async (req, res) => {
         console.log("Error updating streak", error)
     }
 });
-//Fetch users and their information for the admin page
-const fetchUsersPerformance = () => {
-    return [
-        {
-            userId: '1',
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            totalTimeCompleted: 120, // in minutes
-            currentStreak: 5,
-            attend: true,
-            support: false,
-            own: true
-        },
-        {
-            userId: '2',
-            name: 'Jane Smith',
-            email: 'jane.smith@example.com',
-            totalTimeCompleted: 90, // in minutes
-            currentStreak: 3,
-            attend: true,
-            support: true,
-            own: false
-        }
-        // Add more user data as needed
-    ];
-};
-// app.get('/api/admin/usersPerformance', (req, res) => {
-//     try {
-//         const usersPerformance = fetchUsersPerformance();
-//         res.json(usersPerformance);
-//     } catch (error) {
-//         console.error('Error fetching users performance:', error);
-//         res.status(500).json({ error: 'Failed to fetch users performance' });
-//     }
-// });
+//Fetch users and their information for the admin dashboard
 
 // New endpoint to fetch user performance data
 app.get('/api/userPerformance', async (req, res) => {

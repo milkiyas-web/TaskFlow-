@@ -259,12 +259,9 @@ const TaskColumn = ({
         setLoading(true);
         try {
             await addTask(projectId, taskData);
-            // const updatedTasks = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/projects/${projectId}/tasks`);
-            // Add a delay before fetching the updated tasks list
-            setTimeout(async () => {
-                await getTasks(projectId);
-                setLoading(false); // End loading
-            }, 3000);
+            // Call getTasks after adding a task
+            await getTasks(projectId);
+            setLoading(false); // End loading
         } catch (error) {
             console.error("Error adding task: ", error.message);
             setLoading(false)
