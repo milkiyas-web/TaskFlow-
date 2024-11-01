@@ -28,24 +28,8 @@ export default function Organization() {
 
         fetchOrganizationMembers();
     }, [organization]);
-    const { createOrg, isLoading } = useKindeAuth();
 
-
-    if (isLoading) {
-        return <div className='flex items-center justify-center h-screen w-full'>
-            <div className='loader'></div>
-        </div>;
-    }
-
-    if (!organization) {
-        return <div>No organization selected</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-
-
+    const { userMemberships } = useOrganizationList();
 
     const formattedMembers = members.map(member => {
 
@@ -54,9 +38,6 @@ export default function Organization() {
             label: `${member.publicUserData?.firstName || ''} ${member.publicUserData?.lastName || ''}`.trim() || 'Unknown User'
         };
     });
-
-
-
 
     const hasOrganizations = formattedMembers && userMemberships.data.length > 0
 

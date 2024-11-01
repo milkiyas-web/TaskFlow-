@@ -363,15 +363,27 @@ const fetchUsersPerformance = () => {
         // Add more user data as needed
     ];
 };
-app.get('/api/admin/usersPerformance', (req, res) => {
+// app.get('/api/admin/usersPerformance', (req, res) => {
+//     try {
+//         const usersPerformance = fetchUsersPerformance();
+//         res.json(usersPerformance);
+//     } catch (error) {
+//         console.error('Error fetching users performance:', error);
+//         res.status(500).json({ error: 'Failed to fetch users performance' });
+//     }
+// });
+
+// New endpoint to fetch user performance data
+app.get('/api/userPerformance', async (req, res) => {
     try {
-        const usersPerformance = fetchUsersPerformance();
-        res.json(usersPerformance);
+        const userData = await UserData.find({});
+        res.status(200).json(userData);
     } catch (error) {
-        console.error('Error fetching users performance:', error);
-        res.status(500).json({ error: 'Failed to fetch users performance' });
+        console.error('Error fetching user performance data:', error);
+        res.status(500).json({ error: 'Failed to fetch user performance data' });
     }
 });
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     connectDB();

@@ -16,6 +16,17 @@ const calculateMonthlyKPI = (monthData, totalContributions) => {
     return ((hoursCompleted * 0.5) + (contributionScore * 0.3) + (monthData.streak * 0.2)).toFixed(2);
 };
 
+// Function to generate dummy monthly data for a user
+const generateDummyMonthlyData = (userId) => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months.map((month, index) => ({
+        month,
+        timeCompleted: Math.floor(Math.random() * 100) + 50, // Random hours between 50 and 150
+        streak: Math.floor(Math.random() * 10), // Random streak between 0 and 9
+        timeboxScore: Math.floor(Math.random() * 100) + 20 // Random score between 20 and 120
+    }));
+};
+
 export default function UsersPerformance() {
     const [usersPerformance, setUsersPerformance] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -28,27 +39,20 @@ export default function UsersPerformance() {
             if (!isLoaded || !organization) return;
 
             try {
-                // Fetch performance data from your backend
-                const performanceResponse = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/api/admin/usersPerformance`);
-                const performanceData = performanceResponse.data;
-
-                // Fetch organization members
+                // Instead of fetching from the backend, generate dummy data
                 const memberList = await organization.getMemberships();
-
-                // Combine organization member data with performance data
                 const combinedData = memberList.data.map(member => {
-                    const performanceUser = performanceData.find(p => p.userId === member.publicUserData.userId) || {
-                        totalTimeCompleted: 78,
-                        currentStreak: 34,
-                        contributionTypes: { attend: 5, support: 4, own: 3 },
-                        monthlyData: []
-                    };
+                    const userId = member.publicUserData.userId;
+                    const monthlyData = generateDummyMonthlyData(userId); // Generate dummy data
 
                     return {
-                        userId: member.publicUserData.userId,
+                        userId,
                         name: `${member.publicUserData.firstName} ${member.publicUserData.lastName}`.trim() || 'Unknown',
                         email: member.publicUserData.emailAddress || 'No email',
-                        ...performanceUser
+                        totalTimeCompleted: monthlyData.reduce((sum, data) => sum + data.timeCompleted, 0), // Sum of time completed
+                        currentStreak: Math.max(...monthlyData.map(data => data.streak)), // Max streak
+                        contributionTypes: { attend: Math.floor(Math.random() * 10), support: Math.floor(Math.random() * 10), own: Math.floor(Math.random() * 10) },
+                        monthlyData
                     };
                 });
 
@@ -124,6 +128,8 @@ export default function UsersPerformance() {
     };
 
     const monthlyKPIData = prepareMonthlyKPIData();
+
+    console.log(monthlyKPIData);
 
     if (loading || !isLoaded) return <div className='flex items-center justify-center h-screen w-full'>
         <div className='loader'></div>
