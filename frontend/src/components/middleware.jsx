@@ -1,23 +1,19 @@
-import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
-import '../../src/index.css';
-
+import { useAuth, RedirectToSignIn } from '@clerk/clerk-react';
+import '../../src/index.css'
 const ProtectedRoute = ({ children }) => {
-    const { isAuthenticated, isLoading, login } = useKindeAuth();
+    const { isSignedIn, isLoaded } = useAuth();
 
-    if (isLoading) {
-        return (
-            <div className='flex items-center justify-center h-screen w-full'>
-                <div className='loader'></div>
-            </div>
-        );
+    if (!isLoaded) {
+        return <div className='flex items-center justify-center h-screen w-full'>
+            <div className='loader'></div>
+        </div>;
     }
 
-    if (!isAuthenticated) {
-        return login(); // Redirect to the Kinde login page
+    if (!isSignedIn) {
+        return <RedirectToSignIn />;
     }
 
     return children;
 };
 
 export default ProtectedRoute;
-

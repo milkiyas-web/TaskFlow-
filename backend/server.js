@@ -29,35 +29,35 @@ app.use(
 
 //Clerk webhook testing 
 
-app.post(
-    '/webhook',
-    bodyParser.raw({ type: 'application/json' }),
-    async function (req, res) {
-        try {
-            const payloadString = req.body.toString();
-            const svixHeaders = req.headers;
+// app.post(
+//     '/webhook',
+//     bodyParser.raw({ type: 'application/json' }),
+//     async function (req, res) {
+//         try {
+//             const payloadString = req.body.toString();
+//             const svixHeaders = req.headers;
 
-            const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET_KEY);
-            const evt = wh.verify(payloadString, svixHeaders);
-            const { id, ...attributes } = evt.data;
-            // Handle the webhooks
-            const eventType = evt.type;
-            if (eventType === 'user.created') {
-                console.log(`User ${id} was ${eventType}`);
-                console.log(attributes);
-            }
-            res.status(200).json({
-                success: true,
-                message: 'Webhook received',
-            });
-        } catch (err) {
-            res.status(400).json({
-                success: false,
-                message: err.message,
-            });
-        }
-    }
-);
+//             const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET_KEY);
+//             const evt = wh.verify(payloadString, svixHeaders);
+//             const { id, ...attributes } = evt.data;
+//             // Handle the webhooks
+//             const eventType = evt.type;
+//             if (eventType === 'user.created') {
+//                 console.log(`User ${id} was ${eventType}`);
+//                 console.log(attributes);
+//             }
+//             res.status(200).json({
+//                 success: true,
+//                 message: 'Webhook received',
+//             });
+//         } catch (err) {
+//             res.status(400).json({
+//                 success: false,
+//                 message: err.message,
+//             });
+//         }
+//     }
+// );
 
 
 
@@ -338,7 +338,40 @@ app.post('/api/streaks/:userId/update', async (req, res) => {
     }
 });
 //Fetch users and their information for the admin page
-
+const fetchUsersPerformance = () => {
+    return [
+        {
+            userId: '1',
+            name: 'John Doe',
+            email: 'john.doe@example.com',
+            totalTimeCompleted: 120, // in minutes
+            currentStreak: 5,
+            attend: true,
+            support: false,
+            own: true
+        },
+        {
+            userId: '2',
+            name: 'Jane Smith',
+            email: 'jane.smith@example.com',
+            totalTimeCompleted: 90, // in minutes
+            currentStreak: 3,
+            attend: true,
+            support: true,
+            own: false
+        }
+        // Add more user data as needed
+    ];
+};
+app.get('/api/admin/usersPerformance', (req, res) => {
+    try {
+        const usersPerformance = fetchUsersPerformance();
+        res.json(usersPerformance);
+    } catch (error) {
+        console.error('Error fetching users performance:', error);
+        res.status(500).json({ error: 'Failed to fetch users performance' });
+    }
+});
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     connectDB();
